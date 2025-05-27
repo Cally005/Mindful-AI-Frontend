@@ -410,13 +410,19 @@ export function ChatSidebar() {
               <Label htmlFor="typing-effect">Typing animation</Label>
             </div>
           </div>
-          
+          <Button variant="outline" className="w-full justify-start gap-2" asChild>
+            <Link href="/whatsapp">
+              <Settings className="h-4 w-4" />
+              whatsapp
+            </Link>
+          </Button>
           <Button variant="outline" className="w-full justify-start gap-2" asChild>
             <Link href="/settings">
               <Settings className="h-4 w-4" />
               Settings
             </Link>
           </Button>
+        
         </div>
       </aside>
 
