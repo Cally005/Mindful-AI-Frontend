@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -12,12 +12,44 @@ import { Brain, ArrowLeft, Eye, EyeOff, AlertCircle } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { toast } from "@/components/ui/use-toast"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { useEffect } from "react"
 
-// Force dynamic rendering to avoid pre-rendering issues
-export const dynamic = 'force-dynamic'
+// Loading skeleton component
+function LoginPageSkeleton() {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-muted/30">
+      <Link
+        href="/"
+        className="absolute top-8 left-8 flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back to home
+      </Link>
 
-export default function LoginPage() {
+      <div className="flex items-center gap-2 mb-8">
+        <Brain className="h-8 w-8 text-primary" />
+        <span className="text-2xl font-semibold">MindfulAI</span>
+      </div>
+
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl">Welcome back</CardTitle>
+          <CardDescription>Sign in to your account to continue your mental health journey</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="animate-pulse space-y-4">
+            <div className="h-10 bg-muted rounded-md"></div>
+            <div className="h-10 bg-muted rounded-md"></div>
+            <div className="h-10 bg-muted rounded-md"></div>
+            <div className="h-10 bg-muted rounded-md"></div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
+// Component that uses useSearchParams - wrapped in Suspense
+function LoginPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
@@ -338,6 +370,15 @@ export default function LoginPage() {
         </CardFooter>
       </Card>
     </div>
+  )
+}
+
+// Main component with Suspense wrapper
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginPageSkeleton />}>
+      <LoginPageContent />
+    </Suspense>
   )
 }
 
